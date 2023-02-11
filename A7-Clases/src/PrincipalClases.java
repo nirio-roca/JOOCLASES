@@ -177,14 +177,6 @@ public class PrincipalClases {
         List<CFlor> flores = new ArrayList<CFlor>();
         List<CVendedor> Vendedores=new ArrayList<CVendedor>();
         boolean flagmain=true;
-        clientes.add(new CCliente(1, "FRANCISCO", "CARDENAS", "DNI","12345678","pancho@mail.com", "REGULAR", "ACTIVO"));
-        clientes.add(new CCliente(2, "FRANCISCO", "SALAS", "DNI","12345678","pancho@mail.com", "REGULAR", "ACTIVO"));
-
-        flores.add(new CFlor("ROSA","ROJO","DULCE",2));
-        flores.add(new CFlor("MARGARITA","AGRIDULCE","AMARILLO",2));
-
-        Vendedores.add(new CVendedor(2, "DNI", "12345678", "LUIS","ROCCA","pancho@mail.com", "12345", "ACTIVO"));
-        Vendedores.add(new CVendedor(1, "DNI", "12345674", "ALEX","ROCCA","pancho@mail.com", "12345", "DESACTIVO"));
         do {
             int opcionmain = menuPrincipal();
             int countCliente=0;
@@ -212,7 +204,6 @@ public class PrincipalClases {
 
                                 scan.EscribirLinea("Cliente datos: ");
                                 cliente = new CCliente(countCliente++);
-                                clientes.add(cliente);
                                 break;
                             case 2:
                                 scan.EscribirLinea(" - READ / LEER - ");
@@ -477,7 +468,14 @@ public class PrincipalClases {
 
                                     scan.EscribirLinea("  Ingrese los datos flores: ");
                                     flor = new CFlor();
+                                if( flores.contains(flor.getNombre()) && flores.contains(flor.getPrecio()) && flores.contains(flor.getAroma()) && flores.contains(flor.getColor()) && flores.contains(flor.getNombre()) ){
+                                    scan.EscribirLinea("El cliente ya existe ");
+                                }else {
+                                    scan.EscribirLinea("Cliente guardado ");
                                     flores.add(flor);
+                                }
+
+
                                 break;
                             case 2:
                                 scan.EscribirLinea(" * READ / LEER  * ");
