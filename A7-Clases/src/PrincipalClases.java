@@ -39,6 +39,20 @@ public class PrincipalClases {
                             Vendedor.getEstado());
         }
     }
+
+    public static void mostrarDetalle(List<CDetalleVenta> Detalles){
+        System.out.println("ID_DETALLE VENTA\t\tID_VENTA\t\t\tID_PRODUCTO\t\t\tCANTIDAD\t\t\tDESCUENTO\t\t\tPRECIO");
+        for (CDetalleVenta Detalle: Detalles) {
+            scan.EscribirLinea(
+                    Detalle.getIdDetalleVenta()+"\t\t\t\t"+
+                            Detalle.getIdVenta()+"\t\t\t\t\t\t"+
+                            Detalle.getIdProducto()+"\t\t\t\t\t"+
+                            Detalle.getCantidad()+"\t\t\t"+
+                            Detalle.getDescuento()+"\t\t\t\t"+
+                            Detalle.getPrecio());
+        }
+    }
+
     public static int menu(String Clase) {
         int opcion = 0;
         boolean verif = true;
@@ -148,6 +162,17 @@ public class PrincipalClases {
         }
         return pos;
     }
+
+    public static int mostrarDetalle(int i, List<CDetalleVenta> Detalles){
+        int pos = -1;
+        for (CDetalleVenta Detalle : Detalles) {
+            if (Detalle.getIdDetalleVenta() == i ) {
+                pos=Detalles.indexOf(Detalle);
+            }
+        }
+        return pos;
+    }
+
     public static int menuPrincipal() {
         int opcion = 0;
         boolean verif = true;
@@ -159,9 +184,10 @@ public class PrincipalClases {
             scan.EscribirLinea("\t1) Gestionar clientes   ");
             scan.EscribirLinea("\t2) Gestionar flores");
             scan.EscribirLinea("\t3) Gestionar vendedores ");
+            scan.EscribirLinea("\t4) Gestionar detalles venta ");
             opcion = scan.Leer("\t>>Elija una opciòn: ");
             scan.EscribirLinea("");
-            if (opcion >-1 && opcion <= 3) {
+            if (opcion >-1 && opcion <= 4) {
                 verif = false;
             } else {
                 scan.EscribirLinea(" Esa opción no existe ");
@@ -171,16 +197,51 @@ public class PrincipalClases {
         return opcion;
     }
 
+    public static int validardniVendedor(List<CVendedor> Vendedores) {
+        int ret=-1;
+
+        for (CVendedor Vendedor : Vendedores) {
+            if (Vendedor.getNumDocumento().equals(Vendedor.getNumDocumento())) {
+                ret=0;
+            }
+        }
+        return  ret;
+    }
+
+    public static int validardniCliente(List<CCliente> clientes) {
+        int ret=-1;
+
+        for (CCliente cliente : clientes) {
+            if (cliente.getNumDocumento().equals(cliente.getNumDocumento())) {
+                ret=0;
+            }
+        }
+        return  ret;
+    }
+
+    public static int validarDuplicados(List<CFlor> flores) {
+        int ret=-1;
+
+        for (CFlor flor : flores) {
+            if (flor.getNombre().equals(flor.getNombre()) && flor.getColor().equals(flor.getColor())  ) {
+                ret=0;
+            }
+        }
+        return  ret;
+    }
+
 
     public static void main(String[] args) {
         List<CCliente> clientes = new ArrayList<CCliente>();
         List<CFlor> flores = new ArrayList<CFlor>();
-        List<CVendedor> Vendedores=new ArrayList<CVendedor>();
+        List<CVendedor> Vendedores = new ArrayList<CVendedor>();
+        List<CDetalleVenta> Detalles = new ArrayList<CDetalleVenta>();
         boolean flagmain=true;
         do {
             int opcionmain = menuPrincipal();
-            int countCliente=0;
+            int countCliente = 0;
             int countVendedor = 0;
+            int countDetalle = 0;
             switch (opcionmain){
                 case 0:
                     scan.EscribirLinea("SALIENDO DEL PROGRAMA");
@@ -203,7 +264,30 @@ public class PrincipalClases {
 
 
                                 scan.EscribirLinea("Cliente datos: ");
-                                cliente = new CCliente(countCliente++);
+                                boolean flagClien=true;
+                                do {
+                                    cliente = new CCliente(countCliente);
+                                    int tamañolistaC= clientes.size();
+                                    if(tamañolistaC==0){
+                                        scan.EscribirLinea("Cliente añadido");
+                                        clientes.add(cliente);
+                                        flagClien=false;
+                                        countCliente=+1;
+                                    }else {
+                                        int validar=validardniCliente(clientes);
+                                        if (validar !=1 ){
+                                            scan.EscribirLinea("Cliente añadido");
+                                            clientes.add(cliente);
+                                            flagClien=false;
+                                            countCliente=+1;
+                                        }
+                                        scan.EscribirLinea(" << Cliente ya existe ");
+                                        scan.EscribirLinea("-- ingrese nuevamente --");
+                                        flagClien=true;
+                                    }
+                                }while (flagClien);
+
+
                                 break;
                             case 2:
                                 scan.EscribirLinea(" - READ / LEER - ");
@@ -465,17 +549,27 @@ public class PrincipalClases {
                                 break;
                             case 1:
                                 scan.EscribirLinea(" * CREATE / CREAR  * ");
-
-                                    scan.EscribirLinea("  Ingrese los datos flores: ");
+                                scan.EscribirLinea("  Ingrese los datos flores: ");
+                                boolean flagFlor=true;
+                                do {
                                     flor = new CFlor();
-                                if( flores.contains(flor.getNombre()) && flores.contains(flor.getPrecio()) && flores.contains(flor.getAroma()) && flores.contains(flor.getColor()) && flores.contains(flor.getNombre()) ){
-                                    scan.EscribirLinea("El cliente ya existe ");
-                                }else {
-                                    scan.EscribirLinea("Cliente guardado ");
-                                    flores.add(flor);
-                                }
-
-
+                                    int tamañolistaf= flores.size();
+                                    if(tamañolistaf == 0){
+                                        scan.EscribirLinea("Flor añadido");
+                                        flores.add(flor);
+                                        flagFlor=false;
+                                    }else {
+                                        int validar=validarDuplicados(flores);
+                                        if (validar !=1 ){
+                                            scan.EscribirLinea("Flor añadido");
+                                            flores.add(flor);
+                                            flagFlor=false;
+                                        }
+                                        scan.EscribirLinea(" << Flor ya existe ");
+                                        scan.EscribirLinea("-- ingrese nuevamente --");
+                                        flagFlor=true;
+                                    }
+                                }while (flagFlor);
                                 break;
                             case 2:
                                 scan.EscribirLinea(" * READ / LEER  * ");
@@ -650,7 +744,6 @@ public class PrincipalClases {
                 case 3:
                     scan.EscribirLinea(" >>GESTIONANDO VENDEDORES");
                     boolean flagVendedor=true;
-
                     do{
                         int opcionvendedor=menu("vendedores");
                         CVendedor Vendedor;
@@ -664,8 +757,28 @@ public class PrincipalClases {
                                 scan.EscribirLinea("- CREATE / CREAR - ");
                                     scan.EscribirLinea("");
                                 scan.EscribirLinea("\t Datos del vendedor");
-                                    Vendedor = new CVendedor(countVendedor++);
-                                    Vendedores.add(Vendedor);
+                                boolean flagvendedor=true;
+                                do {
+                                    Vendedor = new CVendedor(countVendedor);
+                                    int tamañolista= Vendedores.size();
+                                    if(tamañolista==0){
+                                        scan.EscribirLinea("Vendedor añadido");
+                                        Vendedores.add(Vendedor);
+                                        flagvendedor=false;
+                                        countVendedor=+1;
+                                    }else {
+                                        int validar=validardniVendedor(Vendedores);
+                                        if (validar !=1 ){
+                                            scan.EscribirLinea("Vendedor añadido");
+                                            Vendedores.add(Vendedor);
+                                            flagvendedor=false;
+                                            countVendedor=+1;
+                                        }
+                                        scan.EscribirLinea(" << Vendedor ya existe ");
+                                        scan.EscribirLinea("-- ingrese nuevamente --");
+                                        flagvendedor=true;
+                                    }
+                                }while (flagvendedor);
                                 break;
                             case 2:
                                 scan.EscribirLinea(" - READ / LEER  - ");
@@ -903,7 +1016,187 @@ public class PrincipalClases {
 
                     }while (flagVendedor);
                     break;
+                case 4:
+                    scan.EscribirLinea(" >>GESTIONANDO DETALLE VENTA");
+                    boolean flagDetalleVenta=true;
+                    do{
+                        int opcionDetalle=menu("detalle venta");
+                        CDetalleVenta Detalle;
+
+                        switch (opcionDetalle){
+                            case 0:
+                                scan.EscribirLinea("SALIENDO AL MENÚ PRINCIPAL :)");
+                                flagDetalleVenta=false;
+                                break;
+                            case 1:
+                                scan.EscribirLinea("- CREATE / CREAR - ");
+                                scan.EscribirLinea("");
+                                scan.EscribirLinea("\t Datos del detalle de venta");
+                                Detalle = new CDetalleVenta(countDetalle);
+                                countDetalle=+1;
+                                break;
+                            case 2:
+                                scan.EscribirLinea(" - READ / LEER  - ");
+                                System.out.println("  Menu Mostrar Detalle venta ");
+                                System.out.println(" 0- Regresar al menu Detalle venta");
+                                System.out.println(" 1- Mostrar por posicion");
+                                System.out.println(" 2- Mostrar por Id Detalle venta");
+                                System.out.println(" 3- Mostrar todos los Detalles venta");
+                                int opciondetalle= scan.Leer("Ingrese una opcion: ");
+                                switch (opciondetalle) {
+                                    case 0:
+                                        System.out.println(" ... Regresando al Detalle venta");
+                                        break;
+                                    case 1:
+                                        scan.EscribirLinea("");
+                                        System.out.println("Mostrar por posicion");
+                                        int posicion = scan.Leer("Ingrese la posicion del Detalle venta buscada: ");
+                                        int tamaño = Detalles.size();
+                                        if(posicion <= tamaño && posicion>=0){
+                                            scan.EscribirLinea("Detalle venta en la posición "+posicion+" es: ");
+                                            Detalles.get(posicion).mostrar();
+                                        }else{
+                                            scan.EscribirLinea("Este elemento no existe");
+                                        }
+                                        break;
+                                    case 2:
+                                        scan.EscribirLinea("");
+                                        System.out.println("Mostrar por Id venta");
+                                        int c = scan.Leer("Id venta: ");
+                                        int pos = mostrarDetalle(c,Detalles);
+                                        if(pos == -1){
+                                            scan.EscribirLinea("Este elemento no existe");
+                                        }else{
+                                            scan.EscribirLinea("Detalle venta con el Id "+c+" es: ");
+                                            Detalles.get(pos).mostrar();
+                                        }
+                                        break;
+                                    case 3:
+                                        System.out.println("Mostrar todos los vendedores");
+                                        mostrarDetalle(Detalles);
+                                        break;
+                                }
+                                break;
+                            case 3:
+                                scan.EscribirLinea(" - UPDATE / ACTUALIZAR - ");
+
+                                System.out.println("  Menu Actualizar Detalle venta");
+                                System.out.println(" 0- Regresar al menu Detalle venta");
+                                System.out.println(" 1- Actualizar un campo");
+                                System.out.println(" 2- Actualizar todo");
+                                int opcionActualizarFlor = scan.Leer("   Ingrese una opción: ");
+                                switch (opcionActualizarFlor) {
+                                    case 0:
+                                        System.out.println(" ... Regresando al  Detalle venta");
+                                        break;
+                                    case 1:
+                                        scan.EscribirLinea("");
+                                        System.out.println("Actualizar un campo");
+                                        int pos =scan.Leer("Ingrese la posicion a actualizar: ");
+                                        scan.EscribirLinea("""
+                                                        SUB MENU DE CAMPOS DETALLE VENTA
+                                                   0- Id Detalle de venta
+                                                   1- Id Venta
+                                                   2- Id Producto
+                                                   3- Cantidad
+                                                   4- Descuento
+                                                   5- Precio
+                                                """);
+                                        int campo = scan.Leer("  Ingrese campo que desea actualizar:");
+                                        Detalle = (CDetalleVenta) Detalles.get(pos);
+                                        switch (campo){
+                                            case 0:
+                                                Detalle.setIdDetalleVenta(scan.Leer("Nuevo Id Detalle de venta: "));
+                                                break;
+                                            case 1:
+                                                Detalle.setIdVenta(scan.Leer("Nuevo Id de venta: "));
+                                                break;
+                                            case 2:
+                                                Detalle.setIdProducto(scan.Leer("Nuevo Id de producto: "));
+                                                break;
+                                            case 3:
+                                                Detalle.setCantidad(scan.Leer("Nueva cantidad: "));
+                                                break;
+                                            case 4:
+                                                Detalle.setDescuento(scan.Leer("Nuevo descuento: "));
+                                                break;
+                                            case 5:
+                                                Detalle.setPrecio(scan.Leer("Nuevo precio: "));
+                                                break;
+                                            default:
+                                                scan.EscribirLinea("");
+                                                scan.EscribirLinea(" no exise esa opción");
+                                                break;
+                                        }
+                                        break;
+                                    case 2:
+                                        scan.EscribirLinea("");
+                                        System.out.println("Actualizar todo");
+                                        int tamañoDetalles=Detalles.size();
+                                        scan.EscribirLinea("Actualizando todo");
+                                        for (int i = 0; i < tamañoDetalles; i++) {
+                                            scan.EscribirLinea(" ");
+                                            Detalle = new CDetalleVenta(i);
+                                            Detalles.set(i,Detalle);
+                                        }
+                                        break;
+                                }
+                                break;
+                            case 4:
+                                scan.EscribirLinea(" - DELETE / ELIMINAR - ");
+                                System.out.println("  Menu Eliminar Detalle venta ");
+                                System.out.println(" 0- Regresar al menu Detalle venta");
+                                System.out.println(" 1- Eliminar por posicion");
+                                System.out.println(" 2- Eliminar por Id Detalle venta");
+                                System.out.println(" 3- Eliminar todos los vendedores");
+                                int opcionDelteDetalle = scan.Leer("Ingrese una opcion: ");
+                                switch (opcionDelteDetalle) {
+                                    case 0:
+                                        System.out.println(" ... Regresando al menu Detalle venta");
+                                        break;
+                                    case 1:
+                                        scan.EscribirLinea(" ");
+
+                                        scan.EscribirLinea("Eliminar por posicion");
+                                        int lengethListD = Detalles.size();
+                                        int pos = scan.Leer("Ingrese la posicion a Eliminar: ");
+                                        if(pos <= lengethListD && pos >= 0){
+                                            scan.EscribirLinea("El Detalle venta en la posicón "+pos+" ha sido eliminado");
+                                            Detalles.remove((pos));
+                                        }else {
+                                            scan.EscribirLinea(" Este elemento no existe ");
+                                        }
+                                        break;
+                                    case 2:
+                                        scan.EscribirLinea(" ");
+
+                                        System.out.println(" Eliminar por Id Detalle venta");
+                                        int IdDetalle =scan.Leer("Ingrese Id Detalle venta: ");
+                                        int posicionDe=mostrarDetalle(IdDetalle,Detalles);
+                                        if(posicionDe == -1){
+                                            scan.EscribirLinea("Este elemento no existe");
+                                        }else{
+                                            scan.EscribirLinea("El Id Detalle venta con el "+IdDetalle+" ha sido eliminado: ");
+                                            Detalles.remove(posicionDe);
+                                        }
+                                        break;
+                                    case 3:
+                                        scan.EscribirLinea(" ");
+                                        scan.EscribirLinea("Eliminando todo");
+                                        Detalles.clear();
+                                        break;
+                                    default:
+                                        scan.EscribirLinea(" ");
+                                        scan.EscribirLinea("No existe esa opción");
+                                        break;
+                                }
+                                break;
+                        }
+
+                    }while (flagDetalleVenta);
+                    break;
             }
+
         }while (flagmain);
     }
 

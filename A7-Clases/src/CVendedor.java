@@ -53,6 +53,7 @@ public class CVendedor {
                     Nduc = new  Scanner(System.in).next();
 
                     if(Nduc.length() == 8){
+
                         flag=false;
                     }else {
                         scan.Escribir("Error: Ingrese de nuevo: ");
