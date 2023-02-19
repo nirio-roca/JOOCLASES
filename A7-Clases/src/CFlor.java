@@ -2,6 +2,7 @@ import java.util.Scanner;
 
 public class CFlor {
     // Atributos - Caracterìstica - Propiedades Objeto real
+    private  int IDFlor;
     private String nombre;
     private String color;
     private String aroma;
@@ -10,7 +11,9 @@ public class CFlor {
     // M. Constructores
     // Sobrecarga e metodos Varios metodos con el mismos nombre y diferente coleccion de parametros
 
-    public CFlor(){
+    public CFlor(int i){
+        System.out.println("ID flor: "+i);
+        this.IDFlor(i);
         System.out.print("Ingrese el nombre: ");
         this.setNombre(new Scanner(System.in).nextLine().toUpperCase());
         System.out.print("Ingrese el Aroma: ");
@@ -20,13 +23,17 @@ public class CFlor {
         this.setPrecio(scan.Leer("Ingrese el Precio: "));
     }
 
-    public CFlor(String nombre, String color, String aroma, double precio) {
+    public CFlor(int IDFlor,String nombre, String color, String aroma, double precio) {
+        this.IDFlor=IDFlor;
         this.nombre = nombre;
         this.color = color;
         this.aroma = aroma;
         this.precio = precio;
     }
     // M. Getters
+    public int getIDFlor() {
+        return this.IDFlor;
+    }
 
     public String getNombre() {
         return this.nombre;
@@ -45,6 +52,9 @@ public class CFlor {
     }
 
     // M. Setters
+    public int IDFlor(int id) {
+        return this.IDFlor=id;
+    }
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
@@ -64,6 +74,7 @@ public class CFlor {
 
     // M. Generales - Funcion - Comportamiento
     public void mostrar(){
+        System.out.println("ID flor: "+this.IDFlor);
         System.out.println("Nombre: "+this.nombre);
         System.out.println("Aroma: "+this.aroma);
         System.out.println("Color: "+this.color);

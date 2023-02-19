@@ -32,8 +32,8 @@ public class CCliente {
     }
 
     public CCliente(int i){
-        scan.Escribir("ID: "+(i+1)+"\n");
-        this.setIdCliente(i+1);
+        scan.EscribirLinea("ID cliente: "+(i));
+        this.setIdCliente(i);
         System.out.print("Ingrese el Nombres: ");
         this.setNombres(new Scanner(System.in).nextLine().toUpperCase());
         System.out.print("Ingrese el Apellidos: ");

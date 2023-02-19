@@ -25,9 +25,9 @@ public class CDetalleVenta {
         System.out.println("Precio: "+this.precio);
     }
     public CDetalleVenta(int i){
-        System.out.print("Id Detalle de venta: "+(i+1));
+        System.out.print("Id Detalle de venta: "+(i));
         scan.EscribirLinea("");
-        this.setIdDetalleVenta(i+1);
+        this.setIdDetalleVenta(i);
         this.setIdVenta(scan.Leer("Id Venta: "));
         this.setIdProducto(scan.Leer("Id Producto: "));
         this.setCantidad(scan.Leer("Cantidad: "));
@@ -35,7 +35,14 @@ public class CDetalleVenta {
         this.setPrecio(scan.Leer("Precio: "));
 
     }
-
+    public void mostrarLista(){
+        System.out.print("\t"+this.getIdDetalleVenta());
+        System.out.print("\t"+this.idVenta);
+        System.out.print("\t"+this.idProducto);
+        System.out.print("\t"+this.cantidad);
+        System.out.print("\t"+this.descuento);
+        System.out.println("\t"+this.precio);
+    }
     public int getIdDetalleVenta() {
         return idDetalleVenta;
     }

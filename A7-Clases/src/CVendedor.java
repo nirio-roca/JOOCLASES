@@ -32,8 +32,8 @@ public class CVendedor {
     }
     public CVendedor(int count){
 
-        scan.Escribir("ID vendedor: "+(count+1)+"\n");
-        this.setIdVendedor(count+1);
+        scan.Escribir("ID vendedor: "+(count)+"\n");
+        this.setIdVendedor(count);
         String Tdoc=" ";
         String Nduc=" ";
         boolean flagtipo=true;
@@ -51,9 +51,7 @@ public class CVendedor {
                 boolean flag=true;
                 do {
                     Nduc = new  Scanner(System.in).next();
-
                     if(Nduc.length() == 8){
-
                         flag=false;
                     }else {
                         scan.Escribir("Error: Ingrese de nuevo: ");
